@@ -1,6 +1,6 @@
-# Level 7
+# Part 2
 
-Congrats! You have reached the final level! :)
+Congrats! You have reached the end of the test! :)
 In this final part, we are going to test your creativity.
 
 ## Instructions

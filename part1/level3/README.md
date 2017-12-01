@@ -1,6 +1,6 @@
 # Level 3
 
-Providers want to be get paid! And... providers pay us too.
+Providers want to get paid! And... providers pay us too.
 
 ## Instructions
 
