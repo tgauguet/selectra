@@ -17,5 +17,3 @@ Levels become more complex over time, so you will probably have to re-use some c
 - Pick either **PHP** or **Ruby**
 - Clean, readable and robust code
 - Follow Software Development best practices
-
-Please do try to do the simplest thing that could work first.
