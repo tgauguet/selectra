@@ -21,7 +21,7 @@ class Generator
           user.provider = get_provider_by(user.provider_id)
 
           bill = Bill.new(user)
-          bills << bill.generate_hash
+          bills << bill.generate_bill
         end
 
       when 2,3,4,5,6
@@ -33,7 +33,7 @@ class Generator
           contract.provider = get_provider_by(contract.provider_id)
 
           bill = Bill.new(contract)
-          bills << bill.generate_hash
+          bills << bill.generate_bill
         end
 
         if [5,6].include?(level)

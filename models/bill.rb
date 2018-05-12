@@ -1,25 +1,29 @@
 class Bill
-  attr_accessor :query, :price, :index, :level, :user_id
-
-  YEARLY_INSURANCE_FEE = 365 * 0.05
+  attr_accessor :query, :price, :index, :level, :user_id, :consumption
 
   def initialize(query)
     @query = query
     @index = query.index
     @level = query.level
+    @consumption = level == 1 ? query.yearly_consumption : query.user.yearly_consumption
     @price = base_price.to_f
+    @price = price_with_discount unless level == 1
     @user_id = query.user ? query.user.id : query.id
   end
 
-  def generate_hash
-    price = price_with_discount if query.contract_length.to_i
-    { id: index, price: price.to_format, user_id: user_id }
+  def generate_bill
+    if level == 3
+      commission =  Commission.new(price: price, year_sum: query.contract_length)
+                              .generate_commission
+      { commission: commission, id: index, price: price.to_format, user_id: user_id }
+    else
+      { id: index, price: price.to_format, user_id: user_id }
+    end
   end
 
   private
 
   def base_price
-    consumption = level == 1 ? query.yearly_consumption : query.user.yearly_consumption
     query.provider.price_per_kwh * consumption
   end
 
@@ -35,8 +39,6 @@ class Bill
       tmp2 = price
       price = (tmp2 - (tmp * discount / 100)).to_f
     end
-
-    price
   end
 
 end
