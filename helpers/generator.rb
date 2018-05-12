@@ -1,5 +1,6 @@
 class Generator
-  attr_accessor :users, :providers, :contracts, :contract_modifications, :content, :level
+  attr_reader :level
+  attr_accessor :users, :providers, :contracts, :contract_modifications, :content
 
   def initialize(content)
     @level = content.level
@@ -21,7 +22,7 @@ class Generator
           user.provider = get_provider_by(user.provider_id)
 
           bill = Bill.new(user)
-          bills << bill.generate_bill
+          bills << bill.generate
         end
 
       when 2..6
@@ -37,27 +38,28 @@ class Generator
           if modifications&.any?
             modification_count += modifications.count - 1
 
-            modifications.each.with_index do |modification, iindex|
-              contract.index += iindex
+            modifications.each.with_index do |modification, i|
+              contract.index += i
               modification = modification.to_h
 
+              contract.penality = modification[:provider_id].nil? ? 1 : nil
               modification.each do |key, value|
                 contract[key] = value unless contract[key].nil?
               end
               contract.provider = get_provider_by(contract.provider_id)
 
               bills <<  Bill.new(contract)
-                            .generate_bill
+                            .generate
             end
           else
             bills <<  Bill.new(contract)
-                          .generate_bill
+                          .generate
           end
         end
     end
 
     # store content & generate json
-    content = {:bills => bills}
+    content = { :bills => bills }
     Json.generate(level, content)
   end
 
