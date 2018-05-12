@@ -1,4 +1,4 @@
-class Commission
+class Commission < Bill
   attr_accessor :data
 
   YEARLY_INSURANCE_FEE = 365 * 0.05

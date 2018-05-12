@@ -12,6 +12,7 @@ class Bill
   def generate
     data.duration = contract_duration_in_years
     data.consumption = Consumption.total(data)
+    data.penality = 0 if data.provider.cancellation_fee
 
     price = Price.new(data)
     price.with_discount unless level == 1

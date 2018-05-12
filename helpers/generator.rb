@@ -17,31 +17,25 @@ class Generator
       when 1
 
         self.users.each.with_index(1) do |user, index|
-          user.index = index
-          user.level = self.level
-          user.provider = get_provider_by(user.provider_id)
+          user = set_basics(user, index)
 
           bill = Bill.new(user)
           bills << bill.generate
         end
 
       when 2..6
-        modification_count = 0
-
+        sup_index = 0
         self.contracts.each.with_index(1) do |contract, index|
-          contract.index = index + modification_count
-          contract.level = self.level
-          contract.user = get_user_by(contract.user_id)
-          contract.provider = get_provider_by(contract.provider_id)
-          modifications = get_modifications(contract.id) if self.contract_modifications
+          set_basics(contract, index + sup_index)
+          puts contract.modifications.count
 
-          if modifications&.any?
-            modification_count += modifications.count - 1
+          if contract.modifications&.any?
+            sup_index += contract.modifications.count - 1
 
-            modifications.each.with_index do |modification, i|
-              contract.index += i
+            contract.modifications.each.with_index do |modification, i|
               modification = modification.to_h
 
+              contract.index += 1 unless i == 0
               contract.penality = modification[:provider_id].nil? ? 1 : nil
               modification.each do |key, value|
                 contract[key] = value unless contract[key].nil?
@@ -58,12 +52,19 @@ class Generator
         end
     end
 
-    # store content & generate json
     content = { :bills => bills }
     Json.generate(level, content)
   end
 
   private
+
+  def set_basics(model, index)
+    model.index = index
+    model.level = self.level
+    model.provider = get_provider_by(model.provider_id)
+    model.user = get_user_by(model.user_id) if model.user_id
+    model.modifications = get_modifications(model.id) if self.contract_modifications
+  end
 
   def get_provider_by(id)
     self.providers.find{ |p| p.id == id }

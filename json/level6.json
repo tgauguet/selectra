@@ -11,6 +11,20 @@
       "id": 2,
       "provider_id": 3,
       "start_date": "2018-12-25"
+    },
+    {
+      "contract_id": 1,
+      "end_date": "2020-12-25",
+      "id": 3,
+      "provider_id": 2,
+      "start_date": "2019-12-25"
+    },
+    {
+      "contract_id": 2,
+      "end_date": "2019-12-25",
+      "id": 4,
+      "provider_id": 2,
+      "start_date": "2018-12-25"
     }
   ],
   "contracts": [
