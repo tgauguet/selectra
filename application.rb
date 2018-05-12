@@ -14,20 +14,13 @@ if File.file?(FILE_PATH.to_s)
   file = open(FILE_PATH).read
   if Json.valid?(file)
 
-    # then process
-    case LEVEL
-      when 1
-        bill = Bill.new(file)
-        bill.generate_bills
-      when 2
-        contract = Contract.new(file)
-        contract.generate_bills
-      when 3
-      when 4
-      when 5
-      when 6
-    end
+    content = JSON.parse(file, object_class: OpenStruct)
 
+    # then process
+    content.level = LEVEL
+    generator = Generator.new(content)
+    generator.process
+    
   # input errors
   else
     puts 'An error occured, please verify that your file is a valid JSON.'.red

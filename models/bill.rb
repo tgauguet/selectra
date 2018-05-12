@@ -1,26 +1,42 @@
 class Bill
-  attr_accessor :providers, :users
+  attr_accessor :query, :price, :index, :level, :user_id
 
-  def initialize(*args)
-    content = JSON.parse(*args, object_class: OpenStruct)
+  YEARLY_INSURANCE_FEE = 365 * 0.05
 
-    @providers = content.providers
-    @users = content.users
+  def initialize(query)
+    @query = query
+    @index = query.index
+    @level = query.level
+    @price = base_price.to_f
+    @user_id = query.user ? query.user.id : query.id
   end
 
-  def generate_bills
-    bills = []
+  def generate_hash
+    price = price_with_discount if query.contract_length.to_i
+    { id: index, price: price.to_format, user_id: user_id }
+  end
 
-    self.users.each_with_index do |user, index|
-      price_per_kwh = self.providers.find{ |p| p.id == user.provider_id }["price_per_kwh"]
+  private
 
-      price = (price_per_kwh * user.yearly_consumption).to_i
-      tmp = { id: (index + 1), price: price, user_id: user.id }
-      bills << tmp
+  def base_price
+    consumption = level == 1 ? query.yearly_consumption : query.user.yearly_consumption
+    query.provider.price_per_kwh * consumption
+  end
+
+  def price_with_discount
+    discount = case query.contract_length.to_i
+      when 1 then 10
+      when 2,3 then 20
+      when 3..Float::INFINITY then 25
     end
 
-    content = {:bills => bills}
-    Json.generate("level1", content)
+    if discount
+      tmp = price
+      tmp2 = price
+      price = (tmp2 - (tmp * discount / 100)).to_f
+    end
+
+    price
   end
 
 end

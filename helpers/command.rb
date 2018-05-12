@@ -19,15 +19,15 @@ module Command
     def show_result(file_path)
       show_result = prompt("Your test has run successfully ! Show output file content ? (Y/n)\n".yellow).upcase
       if show_result.eql?("Y")
-        exec "cat #{file_path}"
+        exec "cat #{file_path}; echo"
       else
         puts "Output file path : #{file_path}".light_blue
       end
     end
 
     def prompt(*args)
-        print(*args)
-        gets.gsub("\n", '')
+      print(*args)
+      gets.gsub("\n", '')
     end
 
   end
