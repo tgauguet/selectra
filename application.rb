@@ -2,6 +2,7 @@
 
 require 'rubygems'
 require 'json'
+require 'date'
 
 Dir['./lib/*.rb'].each { |file| require_relative file }
 Dir['./models/*.rb'].each { |file| require_relative file }
@@ -20,7 +21,7 @@ if File.file?(FILE_PATH.to_s)
     content.level = LEVEL
     generator = Generator.new(content)
     generator.process
-    
+
   # input errors
   else
     puts 'An error occured, please verify that your file is a valid JSON.'.red
