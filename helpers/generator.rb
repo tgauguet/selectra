@@ -35,7 +35,7 @@ class Generator
               modification = modification.to_h
               contract.index += 1 unless i == 0
               contract.penality = modification[:provider_id].nil? ? 1 : nil
-              
+
               modification.each do |key, value|
                 contract[key] = value unless contract[key].nil?
               end
@@ -63,6 +63,7 @@ class Generator
     model.provider = get_provider_by(model.provider_id)
     model.user = get_user_by(model.user_id) if model.user_id
     model.modifications = get_modifications(model.id) if self.contract_modifications
+    model
   end
 
   def get_provider_by(id)

@@ -9,7 +9,7 @@ module Command
       if custom_file.eql?("Y")
         file_path = prompt("Type the path to the JSON file you would like to use :\n")
       else
-        file_path = "json/level#{level}.json"
+        file_path = "test/level#{level}.json"
       end
       puts "Running LEVEL #{level} with #{file_path}".blue
 

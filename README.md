@@ -2,6 +2,20 @@
 
 Welcome to Selectra's technical tests suite. In this game, you will be building a simple billing service.
 
+## Getting started
+
+```
+bundle
+ruby application.rb
+```
+
+## Tools
+
+* ruby -v 2.5.0
+* gem 'json'
+* gem 'csv'
+* gem 'date'
+
 ## Instructions
 
 - Clone this repository
