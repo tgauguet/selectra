@@ -3,27 +3,36 @@ module Consumption
   def self.total(data)
     return data.yearly_consumption if data.level == 1
 
-    consumption = data.user.yearly_consumption * data.duration
-    if data.level == 6
-      seasons = { name: "spring", operator: :+, percent: 1, days_sum: 92, starts: "03-01", ends: "05-31" },
-                { name: "summer", operator: :-, percent: 1.5, days_sum: 92, starts: "06-01", ends: "08-31" },
-                { name: "autumn", operator: :+, percent: 0.7, days_sum: 91, starts: "09-01", ends: "11-30" },
-                { name: "winter", operator: :+, percent: 0, days_sum: 90, starts: "11-01", ends: "02-28" }
+    data.level == 6 ? seasonal_consumption(data) : data.user.yearly_consumption * data.duration
+  end
 
-      kwh = consumption / 4
+  private
+
+  def self.seasonal_consumption(data)
+    kwh = data.user.yearly_consumption / 4
+    final_consumption = 0
+    start_month = Date.parse(data.start_date).month
+    seasons = { name: "spring", operator: :+, percent: 1 },
+              { name: "summer", operator: :-, percent: 1.5 },
+              { name: "autumn", operator: :+, percent: 0.7 },
+              { name: "winter", operator: :+, percent: 0 }
+
+    data.duration.times do |index|
       consumption = 0
+
       seasons.each do |s|
         amount = kwh * s[:percent] / 100
-
-        if s[:name] == "autumn"
+        if s[:name] == "autumn" && index == 0 && (start_month < 3 || start_month > 11)
           tmp = (kwh.public_send(s[:operator], amount) + (consumption / 2)) / 2
         else
           tmp = kwh.public_send(s[:operator], amount)
         end
         consumption += tmp
       end
+
+      final_consumption += consumption
     end
-    consumption
+    final_consumption
   end
 
 end

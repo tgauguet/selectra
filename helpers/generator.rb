@@ -27,16 +27,15 @@ class Generator
         sup_index = 0
         self.contracts.each.with_index(1) do |contract, index|
           set_basics(contract, index + sup_index)
-          puts contract.modifications.count
 
           if contract.modifications&.any?
             sup_index += contract.modifications.count - 1
 
             contract.modifications.each.with_index do |modification, i|
               modification = modification.to_h
-
               contract.index += 1 unless i == 0
               contract.penality = modification[:provider_id].nil? ? 1 : nil
+              
               modification.each do |key, value|
                 contract[key] = value unless contract[key].nil?
               end

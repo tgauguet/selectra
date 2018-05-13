@@ -1,0 +1,44 @@
+{
+  "bills": [
+    {
+      "commission": {
+        "insurance_fee": 18.25,
+        "provider_fee": 571.31,
+        "selectra_fee": 71.41
+      },
+      "id": 1,
+      "price": 539.56,
+      "user_id": 1
+    },
+    {
+      "commission": {
+        "insurance_fee": 18.25,
+        "provider_fee": 503.33,
+        "selectra_fee": 62.92
+      },
+      "id": 2,
+      "price": 521.58,
+      "user_id": 1
+    },
+    {
+      "commission": {
+        "insurance_fee": 18.25,
+        "provider_fee": 151.59,
+        "selectra_fee": 18.95
+      },
+      "id": 3,
+      "price": 169.84,
+      "user_id": 2
+    },
+    {
+      "commission": {
+        "insurance_fee": 18.25,
+        "provider_fee": 633.65,
+        "selectra_fee": 79.21
+      },
+      "id": 4,
+      "price": 651.9,
+      "user_id": 3
+    }
+  ]
+}

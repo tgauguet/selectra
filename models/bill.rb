@@ -12,16 +12,13 @@ class Bill
   def generate
     data.duration = contract_duration_in_years
     data.consumption = Consumption.total(data)
-    data.penality = 0 if data.provider.cancellation_fee
 
     price = Price.new(data)
     price.with_discount unless level == 1
     price.green if data.green
 
     if (3..6) === level
-      commission =  Commission.new(price: price.total, year_sum: data.duration, penality: data.penality)
-                              .to_hash
-
+      commission =  Commission.new(price, data).to_hash
       { commission: commission, id: index, price: price.total.round(2).to_format, user_id: user_id }
     else
       { id: index, price: price.total.round(2).to_format, user_id: user_id }
