@@ -1,9 +1,10 @@
 class Price < Bill
-  attr_reader :data
   attr_accessor  :total
 
+  GREEN_REDUCTION = 0.05
+
   def initialize(data)
-    @data = data
+    super(data)
     @total = data.provider.price_per_kwh * data.consumption
   end
 
@@ -18,7 +19,7 @@ class Price < Bill
   end
 
   def green
-    self.total = total - data.consumption * 0.05
+    self.total = total - data.consumption * GREEN_REDUCTION
   end
 
 end
