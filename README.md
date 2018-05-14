@@ -16,4 +16,4 @@ ruby application.rb
 
 ## Note
 
-A single app run all levels
+* A single app run all levels

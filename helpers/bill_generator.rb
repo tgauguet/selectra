@@ -2,9 +2,9 @@ module BillGenerator
   extend self
 
   def process(json)
-    dispatch(json)
+    init_process(json)
 
-    create_bills_for_users
+    create_bills_list
 
     json = { :bills => @bills }
     Json.generate(@level, json)
@@ -12,7 +12,7 @@ module BillGenerator
 
   private
 
-  def dispatch(json)
+  def init_process(json)
     @bills = []
     @level = json.level
     @users = json.users
@@ -21,7 +21,7 @@ module BillGenerator
     @contract_modifications = json.contract_modifications
   end
 
-  def create_bills_for_users
+  def create_bills_list
     sup_index = 0
     model = @level == 1 ? @users : @contracts
 
@@ -31,14 +31,14 @@ module BillGenerator
       if model.modifications&.any?
         sup_index += model.modifications.count - 1
 
-        create_bills_based_on_modifications(model)
+        create_bills_with_modifications(model)
       else
-        create_new_bill(model)
+        store_current_bill(model)
       end
     end
   end
 
-  def create_bills_based_on_modifications(model)
+  def create_bills_with_modifications(model)
     model.modifications.each.with_index do |modification, i|
       modification = modification.to_h
       model.index += 1 unless i == 0
@@ -49,11 +49,11 @@ module BillGenerator
       end
       model.provider = get_provider_by(model.provider_id)
 
-      create_new_bill(model)
+      store_current_bill(model)
     end
   end
 
-  def create_new_bill(model)
+  def store_current_bill(model)
     @bills << Bill.new(model)
                   .generate
   end

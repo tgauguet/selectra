@@ -2,7 +2,6 @@
 
 require 'rubygems'
 require 'json'
-require 'test/unit'
 require 'date'
 
 Dir.glob(['./lib/*.rb', './models/*.rb', './helpers/*.rb']).each { |file| require_relative file }

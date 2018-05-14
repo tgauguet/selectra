@@ -24,10 +24,10 @@ module Consumption
 
         seasons.each do |s|
           amount = kwh * s[:percent] / 100
-          if s[:name] == "autumn" && index == 0 && (start_month < 3 || start_month > 11)
-            tmp = (kwh.public_send(s[:operator], amount) + (consumption / 2)) / 2
-          else
-            tmp = kwh.public_send(s[:operator], amount)
+          tmp = kwh.public_send(s[:operator], amount)
+
+          if s[:name] == "autumn" && !(index == 0 && start_month > 2 && start_month < 12)
+            tmp = (tmp + (consumption / 2)) / 2
           end
           consumption += tmp
         end
@@ -36,7 +36,7 @@ module Consumption
       end
       final_consumption
     end
-    
+
   end
 
 end
